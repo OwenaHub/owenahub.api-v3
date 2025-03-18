@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('course_enrollments', function (Blueprint $table) {
             $table->id();
+            $table->uuid('user_id')->constrained('users')->cascadeOnDelete();
+            $table->ulid('course_id')->constrained('courses')->cascadeOnDelete();
+            $table->string('completed')->default(false);
             $table->timestamps();
         });
     }
