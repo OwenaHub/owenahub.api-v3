@@ -15,9 +15,22 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        $user = User::factory()->create([
+            'name' => 'Ernest Haruna',
+            'email' => 'ernest@owenahub.com',
+            'account_type' => 'admin',
+            'email_verified_at' => now(),
+            'password' => "qwerty123$*",
+        ]);
+
+        $user->mentor_profile()->create([
+            'status' => 'active',
+            'is_verified' => true
         ]);
     }
 }
