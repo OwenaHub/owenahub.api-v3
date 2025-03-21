@@ -13,8 +13,13 @@ class Course extends Model
 
     protected $fillable = [
         'title',
+        'about',
+        'tags',
+        'learning_goals',
+        'requirements',
         'description',
         'thumbnail',
+        'start_date',
         'price',
         'level',
         'status'
