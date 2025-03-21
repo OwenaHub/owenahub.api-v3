@@ -34,4 +34,9 @@ class Course extends Model
     {
         return $this->hasMany(Module::class);
     }
+
+    public function room(): HasMany
+    {
+        return $this->hasMany(Room::class);
+    }
 }
