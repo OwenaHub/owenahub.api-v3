@@ -15,13 +15,7 @@ class NotificationCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'notifications' => [
-                'id' => $this->id,
-                'isRead' => $this->is_read,
-                'source' => $this->source,
-                'content' => $this->content,
-                'createdAt' => $this->created_at,
-            ]
+            'notifications' => NotificationResource::collection($this->collection),
         ];
     }
 }
