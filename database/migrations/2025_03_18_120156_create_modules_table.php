@@ -16,7 +16,7 @@ return new class extends Migration
             $table->ulid('course_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->integer('position');
-            $table->string('description');
+            $table->text('description');
             $table->timestamps();
         });
     }
