@@ -15,12 +15,12 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->foreignId('mentor_profile_id')->constrained('mentor_profiles')->cascadeOnDelete();
             $table->string('title');
-            $table->string('about');
+            $table->text('about');
             $table->string('tags');
             $table->string('thumbnail')->nullable();;
-            $table->string('learning_goals')->nullable();
-            $table->string('requirements')->nullable();
-            $table->string('description')->nullable();
+            $table->text('learning_goals')->nullable();
+            $table->text('requirements')->nullable();
+            $table->text('description')->nullable();
             $table->dateTime('start_date')->nullable();
             $table->decimal('price', 8, 2)->default(0.00);
             $table->enum('status', ['draft', 'suspended', 'published'])->default('draft');

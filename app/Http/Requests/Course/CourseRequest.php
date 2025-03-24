@@ -24,11 +24,11 @@ class CourseRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'about' => 'required|string|max:255',
+            'about' => 'required|string|max:800',
             'tags' => 'required|string|max:255',
             'thumbnail' => 'nullable|mimes:jpeg,png,jpg|image|max:2048',
-            'learning_goals' => 'nullable|string|max:255',
-            'requirements' => 'nullable|string|max:255',
+            'learning_goals' => 'nullable|string',
+            'requirements' => 'nullable|string',
             'description' => 'nullable|string',
             'start_date' => 'nullable|date',
             'price' => 'nullable|numeric|min:0|max:999999.99',

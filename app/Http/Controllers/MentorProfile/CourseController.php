@@ -6,24 +6,29 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Course\CourseRequest;
+use App\Http\Resources\CourseResource;
+use App\Http\Resources\UserResource;
 
 class CourseController extends Controller
 {
     public function index(Request $request)
     {
-        $mentor = $request->user()->mentor_profile;
+        try {
+            $mentor = $request->user()->mentor_profile;
 
-        if (!$mentor) {
+            if (!$mentor) {
+                return response()->json([
+                    'error' => 'User does not have a mentor profile'
+                ], 404);
+            }
+
+            $courses = $mentor->course()->get();
+            return CourseResource::collection($courses);
+        } catch (\Exception $e) {
             return response()->json([
-                'error' => 'User does not have a mentor profile'
-            ], 404);
+                'error' => $e->getMessage(),
+            ]);
         }
-
-        $courses = $mentor->course()->get();
-
-        return response()->json([
-            'courses' => $courses
-        ]);
     }
 
     public function store(CourseRequest $request)
@@ -40,9 +45,7 @@ class CourseController extends Controller
                 ->course()
                 ->create($data);
 
-            return response([
-                'course' => $course,
-            ], 201);
+            return new UserResource($course);
         } catch (\Exception $e) {
             return response([
                 'error' => $e->getMessage(),
@@ -60,10 +63,7 @@ class CourseController extends Controller
             }
 
             $course->update($data);
-
-            return response([
-                'course' => $course,
-            ], 201);
+            return response()->noContent();
         } catch (\Exception $e) {
             return response([
                 'error' => $e->getMessage(),
@@ -77,9 +77,8 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
-        return response([
-            'course' => $course->with('module')->get()
-        ]);
+        $course->with('module');
+        return new CourseResource($course);
     }
 
     public function delete(Course $course)
