@@ -6,8 +6,8 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Course\CourseRequest;
-use App\Http\Resources\CourseResource;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\Learning\CourseCollection;
+use App\Http\Resources\Learning\CourseResource;
 
 class CourseController extends Controller
 {
@@ -23,7 +23,7 @@ class CourseController extends Controller
             }
 
             $courses = $mentor->course()->get();
-            return CourseResource::collection($courses);
+            return new CourseCollection($courses);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
@@ -45,7 +45,7 @@ class CourseController extends Controller
                 ->course()
                 ->create($data);
 
-            return new UserResource($course);
+            return new CourseResource($course);
         } catch (\Exception $e) {
             return response([
                 'error' => $e->getMessage(),
@@ -69,10 +69,7 @@ class CourseController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
-
-        return response()->json([
-            'course' => $course
-        ]);
+        return new CourseResource($course);
     }
 
     public function show(Course $course)

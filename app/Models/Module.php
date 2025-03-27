@@ -13,6 +13,7 @@ class Module extends Model
         'title',
         'description',
         'position',
+        'is_free'
     ];
 
     public function course(): BelongsTo

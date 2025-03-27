@@ -5,14 +5,14 @@ namespace App\Http\Requests\Course;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class ModuleRequest extends FormRequest
+class LessonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Auth::check() && Auth::user()->mentor_profile;;
+        return Auth::check() && Auth::user()->mentor_profile;
     }
 
     /**
@@ -23,10 +23,10 @@ class ModuleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'position' => 'required|numeric',
-            'is_free' => 'nullable|boolean',
+            'title' => 'string|max:255|required',
+            'content' => 'string|nullable',
+            'video_url' => 'string|max:255|nullable',
+            'position' => 'string|max:255|nullable',
         ];
     }
 }

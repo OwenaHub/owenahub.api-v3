@@ -4,6 +4,7 @@ namespace App\Http\Controllers\MentorProfile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Course\ModuleRequest;
+use App\Http\Resources\Learning\ModuleResource;
 use App\Models\Course;
 use App\Models\Module;
 
@@ -20,7 +21,7 @@ class ModuleController extends Controller
 
             $module = $course->module()->create($data);
 
-            return response()->json($module, 201);
+            return new ModuleResource($module);
         } catch (\Exception $e) {
             return response([
                 'error' => $e->getMessage(),
@@ -39,7 +40,7 @@ class ModuleController extends Controller
 
             $module->update($data);
 
-            return response()->json($module, 200);
+            return new ModuleResource($module);
         } catch (\Exception $e) {
             return response([
                 'error' => $e->getMessage(),
@@ -53,8 +54,7 @@ class ModuleController extends Controller
             if ($module->course_id !== $course->id) {
                 return response()->json(['error' => 'Module does not belong to the specified course.'], 404);
             }
-
-            return response()->json($module, 200);
+            return new ModuleResource($module);
         } catch (\Exception $e) {
             return response([
                 'error' => $e->getMessage(),

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->integer('position');
             $table->text('description');
+            $table->boolean('is_free')->default(false);
             $table->timestamps();
         });
     }

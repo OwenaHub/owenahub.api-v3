@@ -13,7 +13,6 @@ class Lesson extends Model
         'content',
         'video_url',
         'position',
-        'is_free'
     ];
 
     public function module(): BelongsTo
