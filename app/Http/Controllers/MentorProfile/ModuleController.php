@@ -62,9 +62,13 @@ class ModuleController extends Controller
         }
     }
 
-    public function destroy(Module $module)
+    public function destroy(Course $course, Module $module)
     {
         try {
+            if ($module->course_id !== $course->id) {
+                return response()->json(['error' => 'Module does not belong to the specified course.'], 404);
+            }
+            
             $module->delete();
             return response()->noContent();
         } catch (\Exception $e) {

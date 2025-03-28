@@ -10,16 +10,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::apiResource('courses', CourseController::class);
 
-        Route::prefix('courses')->group(function () {
-            Route::post('{course}/modules', [ModuleController::class, 'store']); // Create module
-            Route::get('{course}/modules/{module}', [ModuleController::class, 'show']); // Get module
-            Route::put('{course}/modules/{module}', [ModuleController::class, 'update']); // Update module
-            Route::delete('modules/{module}', [ModuleController::class, 'destroy']); // Delete module
+        Route::prefix('courses/{course}')->group(function () {
+            Route::apiResource('modules', ModuleController::class)->except(['index']);
 
-            Route::post('{course}/modules/{module}', [LessonController::class, 'store']); // Create lesson
-            Route::post('modules/{module}', [LessonController::class, 'show']); // Get lesson
-            Route::put('modules/{module}', [LessonController::class, 'update']); // Update lesson
-            Route::delete('modules/{module}', [LessonController::class, 'destroy']); // Delete lesson
+            Route::prefix('modules/{module}')->group(function () {
+                Route::apiResource('lessons', LessonController::class)->except(['index']);
+            });
         });
     });
 });
