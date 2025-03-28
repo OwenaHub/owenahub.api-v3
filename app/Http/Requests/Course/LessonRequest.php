@@ -26,7 +26,7 @@ class LessonRequest extends FormRequest
             'title' => 'string|max:255|required',
             'content' => 'string|nullable',
             'video_url' => 'string|max:255|nullable',
-            'position' => 'string|max:255|nullable',
+            'position' => 'numeric|max:100|nullable',
         ];
     }
 }

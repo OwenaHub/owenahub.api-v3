@@ -36,3 +36,4 @@ class CourseRequest extends FormRequest
         ];
     }
 }
+

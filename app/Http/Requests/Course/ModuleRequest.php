@@ -25,7 +25,7 @@ class ModuleRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'position' => 'required|numeric',
+            'position' => 'nullable|max:100|numeric',
             'is_free' => 'nullable|boolean',
         ];
     }

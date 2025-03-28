@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('learning_goals')->nullable();
             $table->text('requirements')->nullable();
             $table->text('description')->nullable();
-            $table->dateTime('start_date')->nullable();
+            $table->date('start_date')->nullable();
             $table->decimal('price', 8, 2)->default(0.00);
             $table->enum('status', ['draft', 'suspended', 'published'])->default('draft');
             $table->timestamps();

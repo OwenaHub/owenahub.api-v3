@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Course\CourseRequest;
 use App\Http\Resources\Learning\CourseCollection;
 use App\Http\Resources\Learning\CourseResource;
+use Illuminate\Support\Facades\Log;
 
 class CourseController extends Controller
 {
@@ -53,6 +54,12 @@ class CourseController extends Controller
         }
     }
 
+    public function show(Course $course)
+    {
+        $course->with('module');
+        return new CourseResource($course);
+    }
+
     public function update(CourseRequest $request, Course $course)
     {
         $data = $request->validated();
@@ -63,19 +70,12 @@ class CourseController extends Controller
             }
 
             $course->update($data);
-            return response()->noContent();
+            return new CourseResource($course);
         } catch (\Exception $e) {
             return response([
                 'error' => $e->getMessage(),
             ], 500);
         }
-        return new CourseResource($course);
-    }
-
-    public function show(Course $course)
-    {
-        $course->with('module');
-        return new CourseResource($course);
     }
 
     public function delete(Course $course)
