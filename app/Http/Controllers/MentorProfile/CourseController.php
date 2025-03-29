@@ -78,7 +78,7 @@ class CourseController extends Controller
         }
     }
 
-    public function delete(Course $course)
+    public function destroy(Course $course)
     {
         $course->delete();
         return response()->noContent();

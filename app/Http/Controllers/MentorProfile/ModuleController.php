@@ -15,7 +15,7 @@ class ModuleController extends Controller
         try {
             $data = $request->validated();
 
-            if ($course->module()->where('position', $data['position'])->exists()) {
+            if (!is_null($data['position']) && $course->module()->where('position', $data['position'])->exists()) {
                 return response()->json(['error' => 'A module with the same position already exists.'], 409);
             }
 
@@ -34,7 +34,15 @@ class ModuleController extends Controller
         try {
             $data = $request->validated();
 
-            if ($course->module()->where('position', $data['position'])->where('id', '!=', $module->id)->exists()) {
+            if ($module->course_id !== $course->id) {
+                return response()->json(['error' => 'Module does not belong to the specified course.'], 404);
+            }
+
+            if (Module::where('course_id', $module->course_id)
+                ->where('position', $data['position'])
+                ->where('id', '!=', $module->id)
+                ->exists()
+            ) {
                 return response()->json(['error' => 'A module with the same position already exists.'], 409);
             }
 
@@ -68,7 +76,7 @@ class ModuleController extends Controller
             if ($module->course_id !== $course->id) {
                 return response()->json(['error' => 'Module does not belong to the specified course.'], 404);
             }
-            
+
             $module->delete();
             return response()->noContent();
         } catch (\Exception $e) {

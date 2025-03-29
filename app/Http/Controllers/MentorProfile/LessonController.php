@@ -42,7 +42,11 @@ class LessonController extends Controller
 
             $data = $request->validated();
 
-            if ($lesson->module->lesson()->where('position', $data['position'])->where('id', '!=', $lesson->id)->exists()) {
+            if ($lesson->module->lesson()
+                ->where('position', $data['position'])
+                ->where('id', '!=', $lesson->id)
+                ->exists()
+            ) {
                 return response()->json(['error' => 'A lesson with the same position already exists in this module.'], 409);
             }
 
