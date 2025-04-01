@@ -33,14 +33,17 @@ class LessonController extends Controller
         }
     }
 
-    public function update(LessonRequest $request, Course $course, Lesson $lesson)
+    public function update(LessonRequest $request, Course $course, Module $module, Lesson $lesson)
     {
         try {
+            $data = $request->validated();
+
             if ($lesson->module->course_id !== $course->id) {
                 return response()->json(['error' => 'Lesson does not belong to the specified course.'], 404);
             }
-
-            $data = $request->validated();
+            if ($module->course_id !== $course->id) {
+                return response()->json(['error' => 'Module does not belong to the specified course.'], 404);
+            }
 
             if ($lesson->module->lesson()
                 ->where('position', $data['position'])
@@ -78,11 +81,15 @@ class LessonController extends Controller
         }
     }
 
-    public function destroy(Course $course, Lesson $lesson)
+    public function destroy(Course $course, Module $module, Lesson $lesson)
     {
         try {
-            if ($lesson->module->course_id !== $course->id) {
-                return response()->json(['error' => 'Lesson does not belong to the specified course.'], 404);
+            if ($module->course_id !== $course->id) {
+                return response()->json(['error' => 'Module does not belong to the specified course.'], 404);
+            }
+
+            if ($lesson->module_id !== $module->id) {
+                return response()->json(['error' => 'Lesson does not belong to the specified module.'], 404);
             }
 
             $lesson->delete();
