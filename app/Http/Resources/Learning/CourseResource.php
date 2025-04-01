@@ -25,7 +25,7 @@ class CourseResource extends JsonResource
             'description' => $this->description,
             'startDate' => $this->start_date,
             'price' => $this->price,
-            'status' => $this->status,
+            // 'status' => $this->status,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
             'modules' => ModuleResource::collection($this->module),
