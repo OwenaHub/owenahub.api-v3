@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Learning\CourseCollection;
+use App\Http\Resources\Learning\CourseResource;
 use App\Models\Course;
 use App\Models\CourseEnrollment;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +16,9 @@ class CourseEnrollmentController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $enrolled_courses = $user->course_enrollment()->with('course')->get();
+
+        // Ensure you're fetching courses through the correct relationship
+        $enrolled_courses = $user->course_enrollment()->with('course')->get()->pluck('course');
 
         return new CourseCollection($enrolled_courses);
     }
@@ -38,7 +41,7 @@ class CourseEnrollmentController extends Controller
 
         try {
             DB::transaction(function () use ($user, $course, $request) {
-                if (isset($course->price)) {
+                if ($course->price != 0.00) {
                     $response = RedeemVoucherCodeController::update($request, $course->price);
 
                     // Check if update() returned an error
@@ -65,5 +68,18 @@ class CourseEnrollmentController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function show(Request $request, Course $course)
+    {
+        $user = $request->user();
+
+        if (!$user->course_enrollment()->where('course_id', $course->id)->exists()) {
+            return response()->json([
+                'error' => 'You are not enrolled in this course.'
+            ], 403);
+        }
+
+        return new CourseResource($course);
     }
 }
