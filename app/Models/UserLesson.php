@@ -11,7 +11,7 @@ class UserLesson extends Model
         'user_id',
         'lesson_id',
         'course_enrollment_id',
-        'status'
+        'completed'
     ];
 
     public function user(): BelongsTo
