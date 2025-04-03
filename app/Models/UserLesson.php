@@ -10,7 +10,8 @@ class UserLesson extends Model
     protected $fillable = [
         'user_id',
         'lesson_id',
-        'completed'
+        'course_enrollment_id',
+        'status'
     ];
 
     public function user(): BelongsTo

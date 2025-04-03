@@ -21,6 +21,7 @@ class LessonResource extends JsonResource
             'position' => $this->position,
             'content' => $this->content,
             'videoUrl' => $this->video_url,
+            'completed' => $this->completed
         ];
     }
 }
