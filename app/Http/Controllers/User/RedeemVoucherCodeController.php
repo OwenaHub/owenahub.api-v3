@@ -31,7 +31,7 @@ class RedeemVoucherCodeController extends Controller
         }
 
         // Check if voucher price matches
-        if ($voucher->price != $price) {
+        if (($voucher->price != $price) && ($voucher->price != 0.00)) {
             return response()->json([
                 'error' => 'Voucher code does not match the provided price.'
             ], 400);

@@ -22,4 +22,9 @@ class MentorProfile extends Model
     {
         return $this->hasMany(Course::class);
     }
+
+    public function voucher_code(): HasMany
+    {
+        return $this->hasMany(VoucherCode::class);
+    }
 }

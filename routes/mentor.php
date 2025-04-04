@@ -3,6 +3,7 @@
 use App\Http\Controllers\MentorProfile\CourseController;
 use App\Http\Controllers\MentorProfile\LessonController;
 use App\Http\Controllers\MentorProfile\ModuleController;
+use App\Http\Controllers\MentorProfile\VoucherCodeController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -17,5 +18,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::apiResource('lessons', LessonController::class)->except(['index']);
             });
         });
+
+        Route::apiResource('voucher-codes', VoucherCodeController::class)
+            ->only(['index', 'store', 'destroy']);
     });
 });

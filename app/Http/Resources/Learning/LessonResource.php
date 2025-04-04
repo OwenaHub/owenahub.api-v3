@@ -21,7 +21,7 @@ class LessonResource extends JsonResource
             ->exists() ?? false;
 
         return [
-            // 'id' => $this->id,
+            'id' => $this->id,
             'moduleId' => $this->module_id,
             'title' => $this->title,
             'position' => $this->position,
