@@ -26,8 +26,10 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $formatted_name = ucwords(strtolower($request->name));
+
         $user = User::create([
-            'name' => $request->name,
+            'name' => $formatted_name,
             'email' => $request->email,
             'password' => Hash::make($request->string('password')),
         ]);
