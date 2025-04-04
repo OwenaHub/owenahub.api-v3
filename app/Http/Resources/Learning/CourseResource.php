@@ -23,17 +23,17 @@ class CourseResource extends JsonResource
             'tags' => $this->tags,
             'thumbnail' => $this->thumbnail,
             'learningGoals' => $this->learning_goals,
-            'requirements' => $this->requirements,
-            'description' => $this->description,
-            'startDate' => $this->start_date,
-            'price' => $this->price,
-            $this->mergeWhen(Auth::check() && Auth::user()->mentor_profile, [
-                'status' => $this->status
-            ]),
-            'createdAt' => $this->created_at,
-            'updatedAt' => $this->updated_at,
-            'modules' => ModuleResource::collection($this->module),
-            'creator' => new UserResource($this->mentor_profile->user)
+            // 'requirements' => $this->requirements,
+            // 'description' => $this->description,
+            // 'startDate' => $this->start_date,
+            // 'price' => $this->price,
+            // $this->mergeWhen(Auth::check() && Auth::user()->mentor_profile, [
+            //     'status' => $this->status
+            // ]),
+            // 'createdAt' => $this->created_at,
+            // 'updatedAt' => $this->updated_at,
+            // 'modules' => ModuleResource::collection($this->module),
+            // 'creator' => new UserResource($this->mentor_profile->user)
         ];
     }
 }

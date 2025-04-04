@@ -16,10 +16,7 @@ class CourseEnrollmentController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-
-        // Ensure you're fetching courses through the correct relationship
-        $enrolled_courses = $user->course_enrollment()->with('course')->get()->pluck('course');
-
+        $enrolled_courses = $user->course_enrollment()->with('course')->get()->pluck('course')->filter();
         return new CourseCollection($enrolled_courses);
     }
 
