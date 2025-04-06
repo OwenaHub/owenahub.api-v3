@@ -21,7 +21,7 @@ class CourseEnrollmentController extends Controller
     }
 
     /**
-     * Enroll a user in a slice.
+     * Enroll a user in a course.
      */
     public function store(Request $request, Course $course)
     {
@@ -43,7 +43,10 @@ class CourseEnrollmentController extends Controller
 
                     // Check if update() returned an error
                     if ($response instanceof JsonResponse && $response->getStatusCode() !== 200) {
-                        throw new \Exception($response->getData(true)['error']);
+                        // throw new \Exception($response->getData(true)['error']);
+                        return response()->json([
+                            'error' => $response->getData(true)['error']
+                        ], 400);
                     }
                 }
 
