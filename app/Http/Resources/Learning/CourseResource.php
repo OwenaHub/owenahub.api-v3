@@ -32,7 +32,7 @@ class CourseResource extends JsonResource
             ]),
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
-            'modules' => ModuleResource::collection($this->module),
+            'modules' => ModuleResource::collection($this->module->sortBy('position')),
             'creator' => new UserResource($this->mentor_profile->user)
         ];
     }

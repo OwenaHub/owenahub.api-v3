@@ -20,7 +20,7 @@ class ModuleResource extends JsonResource
             'courseId' => $this->course_id,
             'title' => $this->title,
             'description' => $this->description,
-            'lessons' => LessonResource::collection($this->lesson),
+            'lessons' => LessonResource::collection($this->lesson->sortBy('position')),
             'position' => $this->position,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
