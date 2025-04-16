@@ -16,7 +16,7 @@ class GoogleAuthController extends Controller
 
     public function store()
     {
-        $this->url = env('FRONTEND_URL');
+        $this->url = env('APP_URL');
 
         try {
             $google_user = Socialite::driver('google')->user();
