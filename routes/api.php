@@ -12,7 +12,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::get('/notifications', [NotificationController::class, 'index']);
-    Route::patch('/user/account', [UpdateAccountController::class, 'update']);
+    Route::patch('/account', [UpdateAccountController::class, 'update']);
 });
 
 require __DIR__ . '/auth.php';
