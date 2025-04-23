@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Course\CourseRequest;
 use App\Http\Resources\Learning\CourseCollection;
 use App\Http\Resources\Learning\CourseResource;
-use Illuminate\Support\Facades\Log;
 
 class CourseController extends Controller
 {

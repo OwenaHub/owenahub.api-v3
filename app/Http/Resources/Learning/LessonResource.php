@@ -30,6 +30,7 @@ class LessonResource extends JsonResource
             $this->mergeWhen(Auth::check(), [
                 'completed' => $completed,
             ]),
+            'tasks' => TaskResource::collection($this->task),
         ];
     }
 }

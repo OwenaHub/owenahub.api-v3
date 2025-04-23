@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('about');
             $table->string('tags');
-            $table->string('thumbnail')->nullable();;
+            $table->string('thumbnail')->nullable();
             $table->text('learning_goals')->nullable();
             $table->text('requirements')->nullable();
             $table->text('description')->nullable();

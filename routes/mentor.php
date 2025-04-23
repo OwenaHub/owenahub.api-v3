@@ -3,23 +3,34 @@
 use App\Http\Controllers\MentorProfile\CourseController;
 use App\Http\Controllers\MentorProfile\LessonController;
 use App\Http\Controllers\MentorProfile\ModuleController;
+use App\Http\Controllers\MentorProfile\TaskController;
 use App\Http\Controllers\MentorProfile\VoucherCodeController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::prefix('mentor')->group(function () {
+Route::middleware(['auth:sanctum'])->prefix('mentor')->group(function () {
 
-        Route::apiResource('courses', CourseController::class);
+    // Course Routes
+    Route::apiResource('courses', CourseController::class);
 
-        Route::prefix('courses/{course}')->group(function () {
-            Route::apiResource('modules', ModuleController::class)->except(['index']);
+    // Module Routes
+    Route::prefix('courses/{course}')->group(function () {
+        Route::apiResource('modules', ModuleController::class)->except(['index']);
 
-            Route::prefix('modules/{module}')->group(function () {
-                Route::apiResource('lessons', LessonController::class)->except(['index']);
-            });
+        // Lesson Routes
+        Route::prefix('modules/{module}')->group(function () {
+            Route::apiResource('lessons', LessonController::class)->except(['index']);
         });
-
-        Route::apiResource('voucher-codes', VoucherCodeController::class)
-            ->only(['index', 'store', 'destroy']);
     });
+
+    // Task Routes
+    Route::prefix('tasks')->group(function () {
+        Route::post('lessons/{lesson}', [TaskController::class, 'store']);
+        Route::delete('{task}', [TaskController::class, 'destroy']);
+        Route::patch('{task}', [TaskController::class, 'update']);
+        Route::get('{task}', [TaskController::class, 'show']);
+    });
+
+    // Voucher Code Routes
+    Route::apiResource('voucher-codes', VoucherCodeController::class)
+        ->only(['index', 'store', 'destroy']);
 });
