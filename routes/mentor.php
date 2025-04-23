@@ -23,12 +23,11 @@ Route::middleware(['auth:sanctum'])->prefix('mentor')->group(function () {
     });
 
     // Task Routes
-    Route::prefix('tasks')->group(function () {
-        Route::post('lessons/{lesson}', [TaskController::class, 'store']);
-        Route::delete('{task}', [TaskController::class, 'destroy']);
-        Route::patch('{task}', [TaskController::class, 'update']);
-        Route::get('{task}', [TaskController::class, 'show']);
-    });
+    Route::post('lessons/{lesson}/tasks', [TaskController::class, 'store']);
+
+    Route::get('tasks/{task}', [TaskController::class, 'show']);
+    Route::patch('tasks/{task}', [TaskController::class, 'update']);
+    Route::delete('tasks/{task}', [TaskController::class, 'destroy']);
 
     // Voucher Code Routes
     Route::apiResource('voucher-codes', VoucherCodeController::class)

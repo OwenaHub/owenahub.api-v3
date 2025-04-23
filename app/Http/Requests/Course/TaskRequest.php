@@ -24,8 +24,8 @@ class TaskRequest extends FormRequest
     {
         return [
             'image_url' => 'nullable|mimes:jpeg,png,jpg|image|max:2048',
-            'name' => 'required|string|max:255',
-            'instruction' => 'nullable|string',
+            'name' => 'required|string|max:100',
+            'instruction' => 'required|string|min:50',
         ];
     }
 }
