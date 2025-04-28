@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_id')->constrained('users')->cascadeOnDelete();
-
             // Notification details
             $table->boolean('is_read')->default(false);
             $table->string('source')->default('dashboard');

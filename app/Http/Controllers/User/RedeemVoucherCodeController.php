@@ -46,7 +46,6 @@ class RedeemVoucherCodeController extends Controller
 
         try {
             $voucher->update(['status' => 'redeemed']);
-
             return response()->json([
                 'message' => 'Voucher successfully redeemed.'
             ], 200);

@@ -16,7 +16,12 @@ class CourseEnrollmentController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $enrolled_courses = $user->course_enrollment()->with('course')->get()->pluck('course')->filter();
+
+        $enrolled_courses = $user->course_enrollment()
+            ->with('course')
+            ->get()
+            ->pluck('course')->filter();
+
         return new CourseCollection($enrolled_courses);
     }
 
@@ -32,7 +37,7 @@ class CourseEnrollmentController extends Controller
             ['course_id', $course->id],
         ])->exists()) {
             return response()->json([
-                'error' => 'You\'ve already started this slice!'
+                'error' => 'You\'ve already started this course!'
             ], 409);
         }
 
@@ -41,7 +46,6 @@ class CourseEnrollmentController extends Controller
                 if ($course->price != 0.00) {
                     $response = RedeemVoucherCodeController::update($request, $course->price);
 
-                    // Check if update() returned an error
                     if ($response instanceof JsonResponse && $response->getStatusCode() !== 200) {
                         // throw new \Exception($response->getData(true)['error']);
                         return response()->json([
@@ -56,9 +60,8 @@ class CourseEnrollmentController extends Controller
                 ]);
 
                 $user->notification()->create([
-                    'topic' => 'New Enrollment',
                     'source' => 'courses',
-                    'content' => "Congratulations! You have successfully enrolled in a new course."
+                    'content' => `You have successfully enrolled in $course->title`
                 ]);
             });
 
