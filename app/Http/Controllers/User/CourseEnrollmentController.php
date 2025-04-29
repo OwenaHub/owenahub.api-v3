@@ -61,7 +61,7 @@ class CourseEnrollmentController extends Controller
 
                 $user->notification()->create([
                     'source' => 'courses',
-                    'content' => `You have successfully enrolled in $course->title`
+                    'content' => "You have successfully enrolled in $course->title"
                 ]);
             });
 
