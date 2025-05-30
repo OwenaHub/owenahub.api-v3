@@ -19,7 +19,6 @@ return [
 
     'allowed_methods' => ['*'],
 
-    // 'allowed_origins' => [env('FRONTEND_URL', 'https://dev.owenahub.com')],
     'allowed_origins' => [
         env('FRONTEND_URL', 'https://owenahub.com'),
         'https://www.owenahub.com',
