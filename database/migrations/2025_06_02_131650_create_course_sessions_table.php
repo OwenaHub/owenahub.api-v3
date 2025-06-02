@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('resumes', function (Blueprint $table) {
+        Schema::create('course_sessions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('user_id')->constrained()->cascadeOnDelete();
-            $table->string('filename');
-            $table->string('file_path');
-            $table->boolean('is_primary')->default(false);
+            $table->ulid('course_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->string('about');
+            $table->string('meeting_link');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('resumes');
+        Schema::dropIfExists('course_sessions');
     }
 };

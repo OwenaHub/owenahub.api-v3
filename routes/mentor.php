@@ -8,7 +8,6 @@ use App\Http\Controllers\MentorProfile\VoucherCodeController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->prefix('mentor')->group(function () {
-
     // Course Routes
     Route::apiResource('courses', CourseController::class);
 

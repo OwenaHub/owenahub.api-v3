@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Room extends Model
+class CourseSession extends Model
 {
     protected $fillable = [
         'name',

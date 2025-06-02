@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('portfolio_settings', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->uuid('user_id')->constrained()->cascadeOnDelete();
             $table->string('theme')->default('default');
-            $table->enum('type', ['basic', 'premium'])->default('basic');
+            $table->string('slug')->unique(); // owena.com/@ernest
+            $table->enum('type', ['basic', 'standard', 'premium'])->default('basic');
             $table->timestamps();
         });
     }

@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subscriptions', function (Blueprint $table) {
+        Schema::create('user_portfolio_subscriptions', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('plan', ['monthly', 'bi-annual', 'yearly']);
-            $table->enum('status', ['active', 'cancelled', 'expired']);
-            $table->date('started_at')->default(now());
-            $table->date('expired_at')->nullable();
+            $table->foreignId('portfolio_plan_id')->constrained()->cascadeOnDelete();
+            $table->boolean('is_active')->default(true);
+            $table->timestamp('started_at')->nullable();
+            $table->timestamp('ends_at')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscriptions');
+        Schema::dropIfExists('user_portfolio_subscriptions');
     }
 };

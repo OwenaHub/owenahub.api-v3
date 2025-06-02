@@ -55,17 +55,12 @@ class User extends Authenticatable
 
     public function work_experience(): HasMany
     {
-        return $this->hasMany(WorkExperience::class);
+        return $this->hasMany(PortfolioWorkExperience::class);
     }
 
     public function project(): HasMany
     {
-        return $this->hasMany(Project::class);
-    }
-
-    public function resume(): HasMany
-    {
-        return $this->hasMany(Resume::class);
+        return $this->hasMany(PortfolioProject::class);
     }
 
     public function portfolio_setting(): HasOne
@@ -78,9 +73,9 @@ class User extends Authenticatable
         return $this->hasOne(AccountSetting::class);
     }
 
-    public function subscription(): HasMany
+    public function portfolio_subscription(): HasMany
     {
-        return $this->hasMany(SubscriptionPlan::class);
+        return $this->hasMany(UserPortfolioSubscription::class);
     }
 
     public function payment(): HasMany

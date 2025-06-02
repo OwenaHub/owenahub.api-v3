@@ -11,19 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('portfolio_projects', function (Blueprint $table) {
             $table->id();
-            $table->uuid('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('portfolio_setting_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->text('description');
-            
-            $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
-
             $table->string('thumbnail')->nullable();
-            $table->string('tech_stack')->nullable();
+            $table->text('build_tools')->nullable();
             $table->string('project_url')->nullable();
-            $table->string('github_url')->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('portfolio_projects');
     }
 };
