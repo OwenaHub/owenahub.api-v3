@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('course_sessions', function (Blueprint $table) {
             $table->id();
-            $table->ulid('course_id')->constrained()->cascadeOnDelete();
+            $table->ulid('course_id')
+                ->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('about');
             $table->string('meeting_link');

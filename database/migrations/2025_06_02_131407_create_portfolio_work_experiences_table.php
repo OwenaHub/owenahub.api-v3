@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-
         Schema::create('portfolio_work_experiences', function (Blueprint $table) {
             $table->id();
             $table->foreignId('portfolio_setting_id')->constrained()->cascadeOnDelete();

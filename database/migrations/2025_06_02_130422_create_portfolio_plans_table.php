@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('portfolio_plans', function (Blueprint $table) {
             $table->id();
             $table->enum('name', ['basic', 'standard', 'premium'])->default('basic');
-            $table->decimal('price', 10, 2); // monthly price
-            $table->integer('max_projects')->default(3);
-            $table->boolean('allow_resume_upload');
-            $table->text('features')->nullable(); // optional JSON or description
+            $table->decimal('price', 10, 2)->default(0.00); // monthly price
+            $table->integer('max_projects')->default(2);
+            $table->boolean('allow_resume_upload')->default(false);
+            $table->boolean('allow_articles')->default(false);
+            $table->boolean('allow_work_experience')->default(false);
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
