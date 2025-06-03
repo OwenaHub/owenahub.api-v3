@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('portfolio_plan_id')->constrained()->cascadeOnDelete();
-            $table->boolean('is_active')->default(true);
+            $table->enum('is_active', ['active', 'expired', 'cancelled'])->default('active');
             $table->timestamp('started_at')->nullable();
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();

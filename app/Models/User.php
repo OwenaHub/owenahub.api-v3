@@ -63,9 +63,9 @@ class User extends Authenticatable
         return $this->hasMany(PortfolioProject::class);
     }
 
-    public function portfolio_setting(): HasOne
+    public function portfolio_account(): HasOne
     {
-        return $this->hasOne(PortfolioSetting::class);
+        return $this->hasOne(PortfolioAccount::class);
     }
 
     public function account_setting(): HasOne

@@ -12,22 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('portfolio_accounts', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->uuid('user_id')->constrained()->cascadeOnDelete();
             $table->text('about')->nullable();
 
             $table->string('theme')->default('default');
             $table->string('slug')->unique(); // owena.com/@ernest
 
-            $table->string('x_handle')->nullable();
-            $table->string('github_handle')->nullable();
-            $table->string('linkedin_handle')->nullable();
+            $table->string('x_url')->nullable();
+            $table->string('github_url')->nullable();
+            $table->string('linkedin_url')->nullable();
             $table->string('website')->nullable();
 
-            $table->string('cta_text')->default('Contact Me');
             $table->string('location')->nullable();
-
-            $table->enum('type', ['basic', 'standard', 'premium'])->default('basic');
+            $table->json('meta')->default(json_encode(['cta' => 'Contact Me']));
             $table->timestamps();
         });
     }
