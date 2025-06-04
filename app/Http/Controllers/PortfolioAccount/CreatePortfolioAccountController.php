@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\UserPortfolioSubscription;
 use App\Http\Requests\Portfolio\PortfolioAccountRequest;
 
-class CreatePorfolioAccountController extends Controller
+class CreatePortfolioAccountController extends Controller
 {
     public function store(PortfolioAccountRequest $request)
     {
