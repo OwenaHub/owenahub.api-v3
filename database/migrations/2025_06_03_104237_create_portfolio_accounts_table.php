@@ -17,7 +17,6 @@ return new class extends Migration
             $table->text('about')->nullable();
 
             $table->string('theme')->default('default');
-            $table->string('slug')->unique(); // owena.com/@ernest
 
             $table->string('x_url')->nullable();
             $table->string('github_url')->nullable();

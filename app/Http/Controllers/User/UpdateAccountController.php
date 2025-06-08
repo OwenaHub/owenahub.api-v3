@@ -3,32 +3,34 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Account\UpdateAccountRequest;
 use Illuminate\Support\Facades\Auth;
 
 class UpdateAccountController extends Controller
 {
-    public function update(Request $request)
+    public function update(UpdateAccountRequest $request)
     {
         $user = Auth::user();
 
-        $validatedData = $request->validate([
-            'name' => 'sometimes|nullable|string|max:255',
-            'username' => 'sometimes|nullable|string|max:50|unique:users,username,' . $user->id,
-            'email' => 'sometimes|nullable|email|unique:users,email,' . $user->id,
-            'profile_picture' => 'sometimes|nullable|url',
-            'title' => 'sometimes|nullable|string|max:255',
-            'biography' => 'sometimes|nullable|string',
-            'account_type' => 'sometimes|nullable|in:user,mentor,admin',
-        ]);
+        $data = $request->validated();
 
-        $user->update($validatedData);
+        try {
+            if ($request->hasFile('profile_picture')) {
+                $data['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
+            }
 
-        $user->notification()->create([
-            'source' => 'account',
-            'content' => "Your account has been updated successfully."
-        ]);
+            $user->update($data);
 
-        return response()->noContent();
+            $user->notification()->create([
+                'source' => 'account',
+                'content' => "Your account has been updated successfully."
+            ]);
+
+            return response()->noContent();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }
