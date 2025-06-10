@@ -1,11 +1,18 @@
 <?php
 
+use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\PortfolioAccount\CreatePortfolioAccountController;
 use App\Http\Controllers\User\CourseEnrollmentController;
 use App\Http\Controllers\User\GetCoursesController;
 use App\Http\Controllers\User\GetLessonController;
 use App\Http\Controllers\User\TaskSubmissionController;
- use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\UpdateAccountController;
+use Illuminate\Support\Facades\Route;
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::patch('/account', [UpdateAccountController::class, 'update']);
+});
 
 Route::prefix('user')->group(function () {
     Route::get('courses', [GetCoursesController::class, 'index']);

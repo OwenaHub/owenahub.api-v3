@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->uuid('user_id')->constrained()->cascadeOnDelete();
             $table->text('about')->nullable();
+            $table->string('experience_years')->nullable();
+            $table->text('skillset')->nullable();
 
             $table->string('theme')->default('default');
 

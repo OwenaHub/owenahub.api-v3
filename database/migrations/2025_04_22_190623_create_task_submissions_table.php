@@ -16,8 +16,10 @@ return new class extends Migration
             $table->uuid('user_id')->constrained(table: 'users', column: 'id')->cascadeOnDelete();
             $table->foreignId('task_id')->constrained(table: 'tasks', column: 'id')->cascadeOnDelete();
             $table->text('content')->nullable();
-            $table->text('feedback')->nullable();
             $table->string('file_url')->nullable();
+
+            // For mentors
+            $table->text('feedback')->nullable();
             $table->enum('status', ['pending', 'failed', 'completed'])->default('pending');
             $table->timestamps();
         });

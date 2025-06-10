@@ -19,15 +19,23 @@ class TaskSubmissionController extends Controller
     public function store(Request $request, Task $task)
     {
         $data = $request->validate([
-            'user_id' => 'required|uuid|exists:users,id',
-            'task_id' => 'required|in:'.$task->id,
+            'task_id' => 'required|in:' . $task->id,
             'content' => 'nullable|string',
-            'file_url' => 'nullable|url',
-            'status' => 'nullable|in:pending,failed,completed',
+            'submission_image' => 'nullable|mimes:jpeg,png,jpg|image|max:2048',
+            // 'status' => 'nullable|in:pending,failed,completed',
         ]);
 
-        $submissions = TaskSubmission::create($data);
-        return new TaskSubmissionResource($submissions);
+        if ($request->hasFile('submission_image')) {
+            $data['submission_image'] = $request->file('submission_image')->store('task_submission_images', 'public');
+        }
+
+        $submission = $request->user()->task_submission->create([
+            'task_id' => $task->id,
+            'content' => $data['content'],
+            'file_url' => $data['submission_image'],
+        ]);
+
+        return new TaskSubmissionResource($submission);
     }
 
     public function show(TaskSubmission $taskSubmission)
@@ -41,7 +49,7 @@ class TaskSubmissionController extends Controller
             'content' => 'nullable|string',
             'feedback' => 'nullable|string',
             'file_url' => 'nullable|url',
-            'status' => 'nullable|in:pending,failed,completed',
+            // 'status' => 'nullable|in:pending,failed,completed',
         ]);
 
         $taskSubmission->update($validatedData);
