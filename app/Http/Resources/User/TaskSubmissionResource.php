@@ -35,10 +35,12 @@ class TaskSubmissionResource extends JsonResource
             'module' => [
                 'id' => $this->task->lesson->module->id,
                 'title' => $this->task->lesson->module->title,
+                'position' => $this->task->lesson->module->position,
             ],
-            'module' => [
-                'id' => $this->task->lesson->module->id,
-                'title' => $this->task->lesson->module->title,
+            'lesson' => [
+                'id' => $this->task->lesson->id,
+                'title' => $this->task->lesson->title,
+                'position' => $this->task->lesson->position,
             ],
         ];
     }
