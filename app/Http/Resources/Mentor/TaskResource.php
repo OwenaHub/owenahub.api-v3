@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Learning;
+namespace App\Http\Resources\Mentor;
 
-use App\Http\Resources\Learning\LessonResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ModuleResource extends JsonResource
+class TaskResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,13 +16,13 @@ class ModuleResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'courseId' => $this->course_id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'lessons' => LessonResource::collection($this->lesson->sortBy('position')),
-            'position' => $this->position,
+            'lessonId' => $this->lesson_id,
+            'imageUrl' => $this->image_url,
+            'name' => $this->name,
+            'instruction' => $this->instruction,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
+            // 'submissions' => TaskSubmissionResource::collection($this->whenLoaded('submissions')),
         ];
     }
 }

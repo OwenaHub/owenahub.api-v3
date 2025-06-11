@@ -4,7 +4,7 @@ namespace App\Http\Controllers\MentorProfile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Course\TaskRequest;
-use App\Http\Resources\Learning\TaskResource;
+use App\Http\Resources\Mentor\TaskResource;
 use App\Models\Lesson;
 use App\Models\Task;
 

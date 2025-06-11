@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Learning\CourseCollection;
-use App\Http\Resources\Learning\CourseResource;
+use App\Http\Resources\User\CourseCollection;
+use App\Http\Resources\User\CourseResource;
 use App\Models\Course;
 use App\Models\CourseEnrollment;
 use Illuminate\Http\JsonResponse;

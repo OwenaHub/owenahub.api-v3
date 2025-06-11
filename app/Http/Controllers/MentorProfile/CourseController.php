@@ -6,8 +6,8 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Course\CourseRequest;
-use App\Http\Resources\Learning\CourseCollection;
-use App\Http\Resources\Learning\CourseResource;
+use App\Http\Resources\Mentor\CourseCollection;
+use App\Http\Resources\Mentor\CourseResource;
 
 class CourseController extends Controller
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Learning;
+namespace App\Http\Resources\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,6 +16,7 @@ class LessonResource extends JsonResource
     public function toArray(Request $request): array
     {
         $user = $request->user();
+
         $completed = $user && $this->user_lesson()
             ->where('user_id', $user->id)
             ->exists() ?? false;
@@ -29,8 +30,8 @@ class LessonResource extends JsonResource
             'videoUrl' => $this->video_url,
             $this->mergeWhen(Auth::check(), [
                 'completed' => $completed,
+                'tasks' => TaskResource::collection($this->task),
             ]),
-            'tasks' => TaskResource::collection($this->task),
         ];
     }
 }

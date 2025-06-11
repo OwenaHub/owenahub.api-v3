@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Resources\Learning;
+namespace App\Http\Resources\User;
 
+use App\Http\Resources\User\LessonResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TaskSubmissionResource extends JsonResource
+class ModuleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,12 +17,11 @@ class TaskSubmissionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'userId' => $this->user_id,
-            'taskId' => $this->task_id,
-            'content' => $this->content,
-            'feedback' => $this->feedback,
-            'fileUrl' => $this->file_url,
-            'status' => $this->status,
+            'courseId' => $this->course_id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'lessons' => LessonResource::collection($this->lesson->sortBy('position')),
+            'position' => $this->position,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
         ];

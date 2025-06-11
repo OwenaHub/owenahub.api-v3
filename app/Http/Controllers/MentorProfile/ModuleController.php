@@ -4,7 +4,7 @@ namespace App\Http\Controllers\MentorProfile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Course\ModuleRequest;
-use App\Http\Resources\Learning\ModuleResource;
+use App\Http\Resources\Mentor\ModuleResource;
 use App\Models\Course;
 use App\Models\Module;
 

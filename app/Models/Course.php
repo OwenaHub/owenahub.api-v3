@@ -40,8 +40,8 @@ class Course extends Model
         return $this->hasMany(Module::class);
     }
 
-    public function room(): HasMany
+    public function course_session(): HasMany
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(CourseSession::class);
     }
 }

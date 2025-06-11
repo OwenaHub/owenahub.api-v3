@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Learning\LessonResource;
+use App\Http\Resources\User\LessonResource;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Module;
@@ -17,11 +17,15 @@ class GetLessonController extends Controller
         try {
             // Parameter check
             if ($module->course_id !== $course->id) {
-                return response()->json(['error' => 'Module does not belong to the specified course.'], 404);
+                return response()->json([
+                    'error' => 'Module does not belong to the specified course.'
+                ], 404);
             }
 
             if ($lesson->module_id !== $module->id) {
-                return response()->json(['error' => 'Lesson does not belong to the specified module.'], 404);
+                return response()->json([
+                    'error' => 'Lesson does not belong to the specified module.'
+                ], 404);
             }
 
             // Marking the lesson as completed or not
@@ -47,7 +51,9 @@ class GetLessonController extends Controller
                 ->first();
 
             if (!$courseEnrollment) {
-                return response()->json(['error' => 'You are not enrolled in this course.'], 403);
+                return response()->json([
+                    'error' => 'You are not enrolled in this course.'
+                ], 403);
             }
 
             $request->user()->user_lesson()->updateOrCreate([
