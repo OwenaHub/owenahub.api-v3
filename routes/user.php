@@ -27,9 +27,11 @@ Route::prefix('user')->group(function () {
         Route::post('enrollment/user-course/{lesson}', [GetLessonController::class, 'store']);
 
         Route::prefix('tasks')->group(function () {
+            Route::get('task-submission', [TaskSubmissionController::class, 'index']);
+            Route::get('task-submission/{taskSubmission}', [TaskSubmissionController::class, 'show']);
             Route::post('{task}/task-submission', [TaskSubmissionController::class, 'store']);
             Route::patch('task-submission/{taskSubmission}', [TaskSubmissionController::class, 'update']);
-            Route::get('task-submission/{taskSubmission}', [TaskSubmissionController::class, 'show']);
+            Route::delete('task-submission/{taskSubmission}', [TaskSubmissionController::class, 'destroy']);
         });
 
         Route::prefix('accounts/portfolio')->group(function () {

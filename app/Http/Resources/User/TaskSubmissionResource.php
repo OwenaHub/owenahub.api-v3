@@ -17,6 +17,10 @@ class TaskSubmissionResource extends JsonResource
         return [
             'id' => $this->id,
             'userId' => $this->user_id,
+            'task' => [
+                'id' => $this->task->id,
+                'name' => $this->task->name
+            ],
             'taskId' => $this->task_id,
             'content' => $this->content,
             'feedback' => $this->feedback,
@@ -24,6 +28,18 @@ class TaskSubmissionResource extends JsonResource
             'status' => $this->status,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
+            'course' => [
+                'id' => $this->task->lesson->module->course->id,
+                'title' => $this->task->lesson->module->course->title,
+            ],
+            'module' => [
+                'id' => $this->task->lesson->module->id,
+                'title' => $this->task->lesson->module->title,
+            ],
+            'module' => [
+                'id' => $this->task->lesson->module->id,
+                'title' => $this->task->lesson->module->title,
+            ],
         ];
     }
 }

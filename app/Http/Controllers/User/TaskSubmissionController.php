@@ -10,10 +10,11 @@ use App\Models\TaskSubmission;
 
 class TaskSubmissionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = TaskSubmission::all();
-        return TaskSubmissionResource::collection($tasks);
+        $submissions = TaskSubmission::where('user_id', $request->user()->id)->get();
+
+        return TaskSubmissionResource::collection($submissions);
     }
 
     public function store(Request $request, Task $task)
@@ -51,9 +52,9 @@ class TaskSubmissionController extends Controller
     public function update(Request $request, TaskSubmission $taskSubmission)
     {
         $validatedData = $request->validate([
-            'content' => 'nullable|string',
-            'feedback' => 'nullable|string',
-            'file_url' => 'nullable|url',
+            'content' => ['nullable', 'string'],
+            'feedback' => ['nullable', 'string'],
+            'file_url' => ['nullable', 'url'],
         ]);
 
         $taskSubmission->update($validatedData);
