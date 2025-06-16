@@ -31,6 +31,7 @@ Route::prefix('mentor')->group(function () {
 
         // Task Submission
         Route::get('task-submission', [TaskSubmissionController::class, 'index']);
+        Route::get('task-submission/{taskSubmission}', [TaskSubmissionController::class, 'show']);
         Route::patch('task-submission/{taskSubmission}', [TaskSubmissionController::class, 'update']);
 
         // Voucher Code Routes

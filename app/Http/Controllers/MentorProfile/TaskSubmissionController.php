@@ -19,10 +19,16 @@ class TaskSubmissionController extends Controller
         return TaskSubmissionResource::collection($submissions);
     }
 
+    public function show(TaskSubmission $taskSubmission)
+    {
+        return new TaskSubmissionResource($taskSubmission);
+    }
+
     public function update(Request $request, TaskSubmission $taskSubmission)
     {
         $validatedData = $request->validate([
             'feedback' => ['nullable', 'string'],
+            'status' => ['nullable', 'in:failed,completed'],
         ]);
 
         $taskSubmission->update($validatedData);

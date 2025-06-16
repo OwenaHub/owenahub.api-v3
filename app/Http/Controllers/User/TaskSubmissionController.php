@@ -28,7 +28,6 @@ class TaskSubmissionController extends Controller
         $data = $request->validate([
             'content' => 'required|string',
             'submission_image' => 'nullable|mimes:jpeg,png,jpg|image|max:2048',
-            // 'status' => 'nullable|in:pending,failed,completed',
         ]);
 
         if ($request->hasFile('submission_image')) {
