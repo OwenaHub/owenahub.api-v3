@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('about');
             $table->string('meeting_link');
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->dateTime('start_time');
+            $table->dateTime('end_time');
             $table->timestamps();
         });
     }
