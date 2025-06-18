@@ -12,7 +12,7 @@ class TaskSubmissionController extends Controller
 {
     public function index(Request $request)
     {
-        $submissions = TaskSubmission::where('user_id', $request->user()->id)->get();
+        $submissions = TaskSubmission::where('user_id', $request->user()->id)->latest()->get();
 
         return TaskSubmissionResource::collection($submissions);
     }
