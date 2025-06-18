@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('portfolio_work_experiences', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('portfolio_setting_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('portfolio_account_id')->constrained()->cascadeOnDelete();
             $table->string('company');
             $table->string('role');
             $table->date('start_date');

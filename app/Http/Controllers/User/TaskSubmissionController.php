@@ -19,7 +19,10 @@ class TaskSubmissionController extends Controller
 
     public function store(Request $request, Task $task)
     {
-        if (TaskSubmission::where('task_id', $task->id)->exists()) {
+        if (TaskSubmission::where([
+            ['task_id', $task->id],
+            ['user_id', $request->user()->id]
+        ])->exists()) {
             return response([
                 'message' => 'There is a subsmission for this task'
             ], 409);
