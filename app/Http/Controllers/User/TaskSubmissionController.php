@@ -53,13 +53,19 @@ class TaskSubmissionController extends Controller
 
     public function update(Request $request, TaskSubmission $taskSubmission)
     {
-        $validatedData = $request->validate([
+        $data = $request->validate([
             'content' => ['nullable', 'string'],
-            'feedback' => ['nullable', 'string'],
-            'file_url' => ['nullable', 'url'],
+            'file_url' => 'nullable|mimes:jpeg,png,jpg|image|max:2048',
         ]);
 
-        $taskSubmission->update($validatedData);
+        if ($request->hasFile('submission_image')) {
+            $data['submission_image'] = $request->file('submission_image')->store('task_submission_images', 'public');
+        }
+
+        $taskSubmission->update([
+            'content' => $data['content'],
+            'file_url' => $data['submission_image'] ?? null,
+        ]);
 
         return new TaskSubmissionResource($taskSubmission);
     }
