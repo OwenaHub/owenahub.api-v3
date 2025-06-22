@@ -25,7 +25,7 @@ class UpdateAccountRequest extends FormRequest
 
         return [
             'name' => 'sometimes|nullable|string|max:255',
-            'username' => 'sometimes|nullable|string|max:50|unique:users,username,' . $user_id,
+            'username' => 'sometimes|nullable|string|max:15|unique:users,username,' . $user_id,
             'email' => 'sometimes|nullable|email|unique:users,email,' . $user_id,
             'profile_picture' => 'sometimes|nullable|url',
             'title' => 'sometimes|nullable|string|max:255',

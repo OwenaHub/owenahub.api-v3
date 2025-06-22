@@ -16,9 +16,10 @@ return new class extends Migration
             $table->uuid('user_id')->constrained()->cascadeOnDelete();
             $table->string('transaction_reference');
             $table->decimal('amount', 8, 2);
-            $table->string('currency', 10);
+            $table->json('metadata')->nullable();
+            $table->enum('purchase_item', ['course', 'portfolio', 'subscription'])->default('course');
             $table->enum('status', ['pending', 'successful', 'failed'])->default('pending');
-            $table->enum('payment_gateway', ['flutterwave', 'paystack', 'stripe']);
+            $table->enum('payment_gateway', ['flutterwave', 'paystack', 'stripe'])->default('paystack');
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\OwenaplusPlan;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -31,6 +32,16 @@ class DatabaseSeeder extends Seeder
         $user->mentor_profile()->create([
             'status' => 'active',
             'is_verified' => true
+        ]);
+
+        // Seeder for plans table
+        OwenaplusPlan::factory()->create([
+            'name' => 'OwenaPlus',
+            'price' => 2700.00,
+            'interval' => 'monthly',
+            'description' => 'Access to all courses and more.',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

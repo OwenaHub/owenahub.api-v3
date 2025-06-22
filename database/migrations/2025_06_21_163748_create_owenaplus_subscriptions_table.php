@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_portfolio_subscriptions', function (Blueprint $table) {
-            $table->id();
+        Schema::create('owenaplus_subscriptions', function (Blueprint $table) {
+            $table->ulid()->primary();
             $table->uuid('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('portfolio_plan_id')->constrained()->cascadeOnDelete();
-            // ! migrate again, as I changed is_active to status
-            $table->enum('status', ['active', 'expired', 'cancelled'])->default('active');
+            $table->foreignId('owenaplus_plan_id')->constrained()->cascadeOnDelete();
+            $table->enum('status', ['active', 'cancelled', 'expired'])->default('active');
             $table->timestamp('started_at')->nullable();
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_portfolio_subscriptions');
+        Schema::dropIfExists('owenaplus_subscriptions');
     }
 };

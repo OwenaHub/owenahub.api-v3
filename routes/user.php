@@ -7,11 +7,15 @@ use App\Http\Controllers\User\GetCoursesController;
 use App\Http\Controllers\User\GetLessonController;
 use App\Http\Controllers\User\TaskSubmissionController;
 use App\Http\Controllers\User\UpdateAccountController;
+use App\Http\Controllers\User\VerifyPaystackPaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/notifications', [NotificationController::class, 'index']);
+
     Route::patch('/account', [UpdateAccountController::class, 'update']);
+
+    Route::post('/verify-paystack', [VerifyPaystackPaymentController::class, 'index']);
 });
 
 Route::prefix('user')->group(function () {
