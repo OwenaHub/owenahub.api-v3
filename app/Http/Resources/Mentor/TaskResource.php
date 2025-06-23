@@ -22,7 +22,6 @@ class TaskResource extends JsonResource
             'instruction' => $this->instruction,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
-            // 'submissions' => TaskSubmissionResource::collection($this->whenLoaded('submissions')),
         ];
     }
 }
