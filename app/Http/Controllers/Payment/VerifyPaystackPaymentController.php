@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
 use App\Models\OwenaplusPlan;
@@ -27,7 +27,7 @@ class VerifyPaystackPaymentController extends Controller
         $response = Http::withToken(env('PAYSTACK_SECRET_KEY'))
             ->get("https://api.paystack.co/transaction/verify/{$reference}");
 
-        Log::info($response->json());
+        Log::info("Verify payment response:", $response->json());
 
         $data = $response->json();
 
@@ -40,8 +40,13 @@ class VerifyPaystackPaymentController extends Controller
             ], 400);
         }
 
+        if (!isset($data['data']['amount'], $data['data']['channel'], $data['data']['currency'])) {
+            return response()->json(['error' => 'Invalid payment data received from Paystack'], 500);
+        }
+
         $amount_paid = $data['data']['amount'] / 100; // kobo to naira
         $payment_mtd = $data['data']['channel'];
+        $payment_currency = $data['data']['currency'];
 
         $plan = OwenaplusPlan::first();
 
@@ -49,28 +54,38 @@ class VerifyPaystackPaymentController extends Controller
             return response()->json(['error' => 'No plan found'], 500);
         }
 
-        // Create subscription
-        $subscription = OwenaplusSubscription::create([
-            'user_id' => $user->id,
-            'plan_id' => $plan->id,
-            'status' => 'active',
-            'started_at' => now(),
-            'ends_at' => now()->addMonth(),
-        ]);
+        // Create or update subscription
+        $subscription = OwenaplusSubscription::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'owenaplus_plan_id' => $plan->id,
+            ],
+            [
+                'status' => 'active',
+                'started_at' => now(),
+                'ends_at' => now()->addMonth(),
+            ]
+        );
 
-        // Record transaction
-        Payment::create([
-            'user_id' => $user->id,
-            'amount' => $amount_paid,
-            'type' => 'subscription',
-            'reference' => $reference,
-            'status' => 'success',
-            'payment_method' => $payment_mtd,
-            'metadata' => json_encode([
-                'plan_id' => $plan->id,
-                'subscription_id' => $subscription->id,
-            ]),
-        ]);
+        // Create or update payment record
+        Payment::updateOrCreate(
+            [
+                'transaction_reference' => $reference,
+                'user_id' => $user->id,
+            ],
+            [
+                'amount' => $amount_paid,
+                'purchase_item' => 'subscription',
+                'status' => 'successful',
+                'payment_gateway' => 'paystack',
+                'metadata' => json_encode([
+                    'plan_id' => $plan->id,
+                    'subscription_id' => $subscription->id,
+                    'payment_channel' => $payment_mtd,
+                    'currency' => $payment_currency,
+                ]),
+            ]
+        );
 
         return response()->json([
             'message' => 'Payment verified'

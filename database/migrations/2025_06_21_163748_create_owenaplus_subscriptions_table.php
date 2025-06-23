@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('owenaplus_subscriptions', function (Blueprint $table) {
-            $table->ulid()->primary();
-            $table->uuid('user_id')->constrained()->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete()->unique();
             $table->foreignId('owenaplus_plan_id')->constrained()->cascadeOnDelete();
             $table->enum('status', ['active', 'cancelled', 'expired'])->default('active');
             $table->timestamp('started_at')->nullable();

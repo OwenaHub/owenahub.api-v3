@@ -14,6 +14,8 @@ class Payment extends Model
         'user_id',
         'transaction_reference',
         'amount',
+        'metadata',
+        'purchase_item', // 'course', 'portfolio', 'subscription'
         'currency',
         'status',
         'payment_gateway'

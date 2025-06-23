@@ -73,9 +73,9 @@ class User extends Authenticatable
         return $this->hasOne(AccountSetting::class);
     }
 
-    public function portfolio_subscription(): HasMany
+    public function portfolio_subscription(): HasOne
     {
-        return $this->hasMany(UserPortfolioSubscription::class);
+        return $this->hasOne(UserPortfolioSubscription::class);
     }
 
     public function payment(): HasMany
@@ -86,6 +86,11 @@ class User extends Authenticatable
     public function task_submission(): HasMany
     {
         return $this->hasMany(TaskSubmission::class);
+    }
+
+    public function owenaplus_subscription(): HasOne
+    {
+        return $this->hasOne(OwenaplusSubscription::class);
     }
 
     /**

@@ -35,13 +35,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Seeder for plans table
-        OwenaplusPlan::factory()->create([
+        OwenaplusPlan::create([
             'name' => 'OwenaPlus',
             'price' => 2700.00,
             'interval' => 'monthly',
             'description' => 'Access to all courses and more.',
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
     }
 }
