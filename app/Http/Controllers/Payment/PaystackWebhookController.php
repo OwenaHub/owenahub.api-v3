@@ -39,18 +39,23 @@ class PaystackWebhookController extends Controller
                 if ($subscription) {
                     $subscription->update([
                         'status' => 'active',
+                        'started_at' => Carbon::now(),
                         'ends_at' => Carbon::parse($subscription->ends_at)->addMonth(), // or based on plan
-                        'next_billing_at' => now()->addMonth(),
                     ]);
 
                     Payment::create([
                         'user_id' => $user->id,
+                        'transaction_reference' => $data['reference'],
                         'amount' => $amount,
-                        'type' => 'subscription',
-                        'reference' => $data['reference'],
-                        'status' => 'success',
-                        'payment_method' => $data['channel'],
-                        'metadata' => json_encode(['renewal' => true]),
+                        'purchase_item' => 'subscription',
+                        'status' => 'successful',
+                        'payment_gateway' => 'paystack',
+                        'metadata' => json_encode([
+                            'renewal' => true,
+                            'subscription_id' => $subscription->id,
+                            'payment_channel' => $data['channel'],
+                            'currency' => $data['currency'],
+                        ]),
                     ]);
                 }
             }

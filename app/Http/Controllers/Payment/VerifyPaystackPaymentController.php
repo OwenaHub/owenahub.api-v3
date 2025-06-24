@@ -27,7 +27,7 @@ class VerifyPaystackPaymentController extends Controller
         $response = Http::withToken(env('PAYSTACK_SECRET_KEY'))
             ->get("https://api.paystack.co/transaction/verify/{$reference}");
 
-        Log::info("Verify payment response:", $response->json());
+        // Log::info("Verify payment response:", $response->json());
 
         $data = $response->json();
 
@@ -45,8 +45,6 @@ class VerifyPaystackPaymentController extends Controller
         }
 
         $amount_paid = $data['data']['amount'] / 100; // kobo to naira
-        $payment_mtd = $data['data']['channel'];
-        $payment_currency = $data['data']['currency'];
 
         $plan = OwenaplusPlan::first();
 
@@ -81,8 +79,8 @@ class VerifyPaystackPaymentController extends Controller
                 'metadata' => json_encode([
                     'plan_id' => $plan->id,
                     'subscription_id' => $subscription->id,
-                    'payment_channel' => $payment_mtd,
-                    'currency' => $payment_currency,
+                    'payment_channel' => $data['data']['channel'],
+                    'currency' => $data['data']['currency'],
                 ]),
             ]
         );
