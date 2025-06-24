@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\User\OwenaPlusSubscriptionResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends JsonResource
 {
@@ -25,6 +27,11 @@ class UserResource extends JsonResource
             'accountType' => $this->account_type,
             'createdAt' => $this->created_at,
             'emailVerifiedAt' => $this->email_verified_at,
+            $this->mergeWhen(Auth::user()->owenaplus_subscription, [
+                'subscription' => new OwenaPlusSubscriptionResource(
+                    $this->owenaplus_subscription
+                ),
+            ]),
         ];
     }
 }
