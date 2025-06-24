@@ -10,6 +10,7 @@ use App\Models\CourseEnrollment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CourseEnrollmentController extends Controller
 {
@@ -42,15 +43,38 @@ class CourseEnrollmentController extends Controller
         }
 
         try {
-            DB::transaction(function () use ($user, $course, $request) {
-                if ($course->price != 0.00) {
-                    $response = RedeemVoucherCodeController::update($request, $course->price);
+            $response = null;
 
-                    if ($response instanceof JsonResponse && $response->getStatusCode() !== 200) {
-                        // throw new \Exception($response->getData(true)['error']);
-                        return response()->json([
-                            'error' => $response->getData(true)['error']
+            DB::transaction(function () use ($user, $course, $request, &$response) {
+                if ($course->price != 0.00) {
+
+                    $use_subscription = $request->input('use_owenaplus');
+                    $use_voucher = $request->input('code');
+
+                    if (isset($use_voucher)) {
+                        $voucherResponse = RedeemVoucherCodeController::update($request, $course->price);
+
+                        if ($voucherResponse instanceof JsonResponse && $voucherResponse->getStatusCode() !== 200) {
+                            throw new \Exception($voucherResponse->getData(true)['error']);
+                        }
+                    } else if (isset($use_subscription)) {
+                        $user->course_enrollment()->create([
+                            'course_id' => $course->id,
+                            'user_id' => $user->id
+                        ]);
+
+                        $user->notification()->create([
+                            'source' => 'courses',
+                            'content' => "You enrolled in $course->title using your Subscription to OwenaPlus"
+                        ]);
+
+                        $response = response()->noContent();
+                        return;
+                    } else {
+                        $response = response()->json([
+                            'error' => 'Failed to enroll, contact support@owenahub.com'
                         ], 400);
+                        return;
                     }
                 }
 
@@ -61,9 +85,11 @@ class CourseEnrollmentController extends Controller
 
                 $user->notification()->create([
                     'source' => 'courses',
-                    'content' => "You have successfully enrolled in $course->title"
+                    'content' => "You have enrolled in $course->title"
                 ]);
             });
+
+            if ($response) return $response;
 
             return response()->noContent();
         } catch (\Exception $e) {
