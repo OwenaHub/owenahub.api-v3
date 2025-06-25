@@ -58,6 +58,15 @@ class CourseEnrollmentController extends Controller
                             throw new \Exception($voucherResponse->getData(true)['error']);
                         }
                     } else if (isset($use_subscription)) {
+                        $user->owenaplus_subscription = $user->owenaplus_subscription()->first();
+
+                        if ($user->owenaplus_subscription && $user->owenaplus_subscription->status !== 'active') {
+                            $response = response()->json([
+                                'error' => 'Your OwenaPlus subscription is not active.'
+                            ], 403);
+                            return;
+                        }
+
                         $user->course_enrollment()->create([
                             'course_id' => $course->id,
                             'user_id' => $user->id

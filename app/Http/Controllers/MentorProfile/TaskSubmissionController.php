@@ -4,6 +4,7 @@ namespace App\Http\Controllers\MentorProfile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Mentor\TaskSubmissionResource;
+use App\Models\Notification;
 use App\Models\TaskSubmission;
 use Illuminate\Http\Request;
 
@@ -28,10 +29,16 @@ class TaskSubmissionController extends Controller
     {
         $validatedData = $request->validate([
             'feedback' => ['nullable', 'string'],
-            'status' => ['nullable', 'in:failed,completed'],
+            'status' => ['nullable', 'in:failed,completed,pending'],
         ]);
 
         $taskSubmission->update($validatedData);
+
+        Notification::create([
+            'user_id' => $taskSubmission->user_id,
+            'source' => 'tasks',
+            'content' => "You have received feedback for the task submission: {$taskSubmission->task->name}",
+        ]);
 
         return new TaskSubmissionResource($taskSubmission);
     }

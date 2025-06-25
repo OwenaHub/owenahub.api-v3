@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Notification\NotificationController;
+use App\Http\Controllers\Payment\GetPaymentRecordsController;
 use App\Http\Controllers\Payment\PaystackWebhookController;
 use App\Http\Controllers\Payment\VerifyPaystackPaymentController;
 use App\Http\Controllers\PortfolioAccount\CreatePortfolioAccountController;
@@ -13,14 +14,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/notifications', [NotificationController::class, 'index']);
-
+    
     Route::patch('/account', [UpdateAccountController::class, 'update']);
-
+    
     Route::post('/verify-paystack', [VerifyPaystackPaymentController::class, 'index']);
     Route::post('/paystack/webhook', [PaystackWebhookController::class, 'handle']);
 });
 
 Route::prefix('user')->group(function () {
+    Route::get('/payments', [GetPaymentRecordsController::class, 'index']);
+
     Route::get('courses', [GetCoursesController::class, 'index']);
     Route::get('courses/{course}', [GetCoursesController::class, 'show']);
 

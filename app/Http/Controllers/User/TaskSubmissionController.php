@@ -43,6 +43,11 @@ class TaskSubmissionController extends Controller
             'file_url' => $data['submission_image'] ?? null,
         ]);
 
+        $request->user()->notification()->create([
+            'source' => 'tasks',
+            'content' => "You have submitted a task for {$task->name}",
+        ]);
+
         return new TaskSubmissionResource($submission);
     }
 
