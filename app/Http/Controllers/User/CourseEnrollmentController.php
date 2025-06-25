@@ -7,6 +7,8 @@ use App\Http\Resources\User\CourseCollection;
 use App\Http\Resources\User\CourseResource;
 use App\Models\Course;
 use App\Models\CourseEnrollment;
+use App\Models\CoursePurchase;
+use App\Models\Payment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,6 +52,7 @@ class CourseEnrollmentController extends Controller
 
                     $use_subscription = $request->input('use_owenaplus');
                     $use_voucher = $request->input('code');
+                    $use_one_time = $request->input('one_time');
 
                     if (isset($use_voucher)) {
                         $voucherResponse = RedeemVoucherCodeController::update($request, $course->price);
@@ -57,6 +60,28 @@ class CourseEnrollmentController extends Controller
                         if ($voucherResponse instanceof JsonResponse && $voucherResponse->getStatusCode() !== 200) {
                             throw new \Exception($voucherResponse->getData(true)['error']);
                         }
+
+                        CoursePurchase::create([
+                            'user_id' => $user->id,
+                            'course' => $course->id,
+                            'price' => $course->price
+                        ]);
+
+                        Payment::updateOrCreate(
+                            [
+                                'transaction_reference' => $use_voucher,
+                                'user_id' => $user->id,
+                            ],
+                            [
+                                'amount' => $course->price,
+                                'purchase_item' => 'course',
+                                'status' => 'successful',
+                                'payment_gateway' => 'paystack',
+                                'metadata' => json_encode([
+                                    'payment_channel' => 'voucher code',
+                                ]),
+                            ]
+                        );
                     } else if (isset($use_subscription)) {
                         $user->owenaplus_subscription = $user->owenaplus_subscription()->first();
 
@@ -79,6 +104,29 @@ class CourseEnrollmentController extends Controller
 
                         $response = response()->noContent();
                         return;
+                    } else if (isset($use_one_time)) {
+                        CoursePurchase::create([
+                            'user_id' => $user->id,
+                            'course' => $course->id,
+                            'price' => $course->price
+                        ]);
+
+                        Payment::updateOrCreate(
+                            [
+                                'transaction_reference' => $use_one_time,
+                                'user_id' => $user->id,
+                            ],
+                            [
+                                'amount' => $course->price,
+                                'purchase_item' => 'course',
+                                'status' => 'successful',
+                                'payment_gateway' => 'paystack',
+                                'metadata' => json_encode([
+                                    'payment_channel' => 'voucher code',
+                                    'currency' => 'NGN',
+                                ]),
+                            ]
+                        );
                     } else {
                         $response = response()->json([
                             'error' => 'Failed to enroll, contact support@owenahub.com'
