@@ -172,6 +172,19 @@ class CourseEnrollmentController extends Controller
             ], 403);
         }
 
+        // ---------------
+        if ($course->price != 0.00) {
+            $course->load(['course_purchase' => function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            }]);
+
+            if ($course->course_purchase->isEmpty() && (!isset($user->owenaplus_subscription) || $user->owenaplus_subscription->status !== 'active')) {
+                return response()->json([
+                    'error' => 'Renew your subscription to access this course'
+                ], 403);
+            }
+        }
+
         return new CourseResource($course);
     }
 }

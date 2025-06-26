@@ -15,7 +15,6 @@ class GetLessonController extends Controller
     public function index(Course $course, Module $module, Lesson $lesson)
     {
         try {
-            // Parameter check
             if ($module->course_id !== $course->id) {
                 return response()->json([
                     'error' => 'Module does not belong to the specified course.'
