@@ -54,6 +54,12 @@ class CourseEnrollmentController extends Controller
                     $use_voucher = $request->input('code');
                     $use_one_time = $request->input('one_time');
 
+                    // Log::info('Course Enrollment Request', [
+                    //     'use_subscription' => $use_subscription,
+                    //     'use_voucher' => $use_voucher,
+                    //     'use_one_time' => $use_one_time,
+                    // ]);
+
                     if (isset($use_voucher)) {
                         $voucherResponse = RedeemVoucherCodeController::update($request, $course->price);
 
@@ -63,7 +69,7 @@ class CourseEnrollmentController extends Controller
 
                         CoursePurchase::create([
                             'user_id' => $user->id,
-                            'course' => $course->id,
+                            'course_id' => $course->id,
                             'price' => $course->price
                         ]);
 
@@ -107,7 +113,7 @@ class CourseEnrollmentController extends Controller
                     } else if (isset($use_one_time)) {
                         CoursePurchase::create([
                             'user_id' => $user->id,
-                            'course' => $course->id,
+                            'course_id' => $course->id,
                             'price' => $course->price
                         ]);
 

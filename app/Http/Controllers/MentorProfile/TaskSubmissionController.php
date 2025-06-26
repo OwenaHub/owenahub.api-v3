@@ -15,7 +15,7 @@ class TaskSubmissionController extends Controller
         $mentor_profile = $request->user()->mentor_profile;
         $submissions = TaskSubmission::whereHas('task.lesson.module.course', function ($query) use ($mentor_profile) {
             $query->where('mentor_profile_id', $mentor_profile->id);
-        })->get();
+        })->latest()->get();
 
         return TaskSubmissionResource::collection($submissions);
     }
