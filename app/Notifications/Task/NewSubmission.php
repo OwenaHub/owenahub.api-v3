@@ -41,15 +41,18 @@ class NewSubmission extends Notification
         if ($this->recipient === 'self') {
             return (new MailMessage)
                 ->subject('Task Submitted Successfully')
-                ->line('Your task has been submitted successfully.')
-                ->action('View Submission', url('/tasks/' . $this->submission->id));
+                ->greeting("Hello " . explode(' ', trim($this->submission->user->name))[0])
+                ->line('Your task has been submitted successfully to your mentor.')
+                ->line('Expect a feedback within 24 hours of submitting your task, so keep an eye on your inbox.')
+                ->action('View Submission', url('/tasks/' . $this->submission->id))
+                ->line('Thank you for using OwenaHub 💛');
         }
 
         return (new MailMessage)
             ->subject('A Student Submitted a Task')
-            ->greeting("{$this->submission->user->name} has submitted a task for your review")
-            ->action('Review Submission', url('/account/mentor-profile/task-submissions/' . $this->submission->id))
-            ->line('Try to respond within 24 hours');
+            ->line("{$this->submission->user->name} has submitted a task for your review")
+            ->line('Try to respond within 24 hours')
+            ->action('Review Submission', url('/account/mentor-profile/task-submissions/' . $this->submission->id));
     }
 
     /**
