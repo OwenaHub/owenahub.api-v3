@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
             'content' => "$user->name, Welcome to OwenaHub"
         ]);
 
-        // event(new Registered($user));
+        event(new Registered($user));
 
         Auth::login($user);
 
