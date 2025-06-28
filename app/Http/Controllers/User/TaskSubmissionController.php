@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Events\TaskSubmitted;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\TaskSubmissionResource;
 use App\Models\Task;
@@ -48,6 +49,7 @@ class TaskSubmissionController extends Controller
             'content' => "You have submitted a task for {$task->name}",
         ]);
 
+        event(new TaskSubmitted($submission));
         return new TaskSubmissionResource($submission);
     }
 

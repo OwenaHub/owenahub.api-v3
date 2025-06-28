@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\TaskSubmission;
+use App\Observers\TaskFeedbackObserver;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
@@ -26,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         JsonResource::withoutWrapping();
+        TaskSubmission::observe(TaskFeedbackObserver::class);
     }
 }
