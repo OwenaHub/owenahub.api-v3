@@ -12,8 +12,18 @@ use Illuminate\Support\Facades\Auth;
 
 class GetLessonController extends Controller
 {
-    public function index(Course $course, Module $module, Lesson $lesson)
+    public function index(Request $request, Course $course, Module $module, Lesson $lesson)
     {
+        if (
+            !$request->user()
+                ->course_enrollment()
+                ->where('course_id', $course->id)->exists()
+        ) {
+            return response()->json([
+                'error' => 'You are not enrolled in this course.'
+            ], 403);
+        }
+
         try {
             if ($module->course_id !== $course->id) {
                 return response()->json([

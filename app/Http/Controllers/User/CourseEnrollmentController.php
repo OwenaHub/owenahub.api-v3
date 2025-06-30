@@ -153,7 +153,6 @@ class CourseEnrollmentController extends Controller
             });
 
             if ($response) return $response;
-
             return response()->noContent();
         } catch (\Exception $e) {
             return response()->json([

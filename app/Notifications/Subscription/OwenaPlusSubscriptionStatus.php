@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Notifications\Task;
+namespace App\Notifications\Subscription;
 
-use App\Models\TaskSubmission;
+use App\Models\OwenaplusSubscription;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Str;
 
-class NewSubmissionFeedback extends Notification
+class OwenaPlusSubscriptionStatus extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(public TaskSubmission $submission) {}
+    public function __construct(public OwenaplusSubscription $subscription) {}
 
     /**
      * Get the notification's delivery channels.
@@ -34,11 +33,11 @@ class NewSubmissionFeedback extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Feedback On Your Submission!')
-            ->line('Hello!, Your mentor has given feedback on your task submission.')
-            ->line('Status: ' . $this->submission->status)
-            ->line('Feedback: ' . Str::limit($this->submission->feedback))
-            ->action('Review Submission', url('/tasks' . $this->submission->id));
+            ->subject('OwenaPlus Subscription')
+            ->greeting("Hello " . explode(' ', trim($this->subscription->user->name))[0])
+            ->line("Your subscription to OwenaPlus is now " . $this->subscription->status)
+            ->action('Go to OwenaHub', url('/'))
+            ->line('Thank you for using OwenaHub 💛');
     }
 
     /**

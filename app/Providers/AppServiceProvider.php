@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\OwenaplusSubscription;
 use App\Models\TaskSubmission;
+use App\Observers\OwenaPlusSubscriptionObserver;
 use App\Observers\TaskFeedbackObserver;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -28,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         JsonResource::withoutWrapping();
+
         TaskSubmission::observe(TaskFeedbackObserver::class);
+        OwenaplusSubscription::observe(OwenaPlusSubscriptionObserver::class);
     }
 }

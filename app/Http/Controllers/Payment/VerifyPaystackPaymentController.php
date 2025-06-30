@@ -8,6 +8,7 @@ use App\Models\OwenaplusSubscription;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class VerifyPaystackPaymentController extends Controller
@@ -16,17 +17,18 @@ class VerifyPaystackPaymentController extends Controller
     {
         $user = Auth::user();
 
+        $request->validate([
+            'reference' => ['required', 'min:16', 'max:16', 'string']
+        ]);
+
         $reference = $request->input('reference');
 
-        if (!$reference) {
-            return response()->json(['error' => 'No reference provided'], 400);
+        if (Payment::where('transaction_reference', $reference)->exists()) {
+            return response()->json(['error' => 'Reference number already exists in our record'], 409);
         }
 
-        // Verify with Paystack
         $response = Http::withToken(env('PAYSTACK_SECRET_KEY'))
             ->get("https://api.paystack.co/transaction/verify/{$reference}");
-
-        // Log::info("Verify payment response:", $response->json());
 
         $data = $response->json();
 
@@ -48,44 +50,55 @@ class VerifyPaystackPaymentController extends Controller
         $plan = OwenaplusPlan::first();
 
         if (!$plan) {
-            return response()->json(['error' => 'No plan found'], 500);
+            return response()->json(['error' => 'No plan found'], 404);
         }
 
-        // Create or update subscription
-        $subscription = OwenaplusSubscription::updateOrCreate(
-            [
-                'user_id' => $user->id,
-                'owenaplus_plan_id' => $plan->id,
-            ],
-            [
-                'status' => 'active',
-                'started_at' => now(),
-                'ends_at' => now()->addMonth(),
-            ]
-        );
+        // Begin transaction
+        DB::beginTransaction();
 
-        // Create or update payment record
-        Payment::updateOrCreate(
-            [
-                'transaction_reference' => $reference,
-                'user_id' => $user->id,
-            ],
-            [
-                'amount' => $amount_paid,
-                'purchase_item' => 'subscription',
-                'status' => 'successful',
-                'payment_gateway' => 'paystack',
-                'metadata' => json_encode([
-                    'plan_id' => $plan->id,
-                    'subscription_id' => $subscription->id,
-                    'payment_channel' => $data['data']['channel'],
-                    'currency' => $data['data']['currency'],
-                ]),
-            ]
-        );
+        try {
+            $subscription = OwenaplusSubscription::updateOrCreate(
+                [
+                    'user_id' => $user->id,
+                    'owenaplus_plan_id' => $plan->id,
+                ],
+                [
+                    'status' => 'active',
+                    'started_at' => now(),
+                    'ends_at' => now()->addMonth(),
+                ]
+            );
 
-        return response()->json([
-            'message' => 'Payment verified'
-        ], 200);
+            Payment::updateOrCreate(
+                [
+                    'transaction_reference' => $reference,
+                    'user_id' => $user->id,
+                ],
+                [
+                    'amount' => $amount_paid,
+                    'purchase_item' => 'subscription',
+                    'status' => 'successful',
+                    'payment_gateway' => 'paystack',
+                    'metadata' => json_encode([
+                        'plan_id' => $plan->id,
+                        'subscription_id' => $subscription->id,
+                        'payment_channel' => $data['data']['channel'],
+                        'currency' => $data['data']['currency'],
+                    ]),
+                ]
+            );
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Payment verified'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => 'An error occurred while processing the payment.',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 }
