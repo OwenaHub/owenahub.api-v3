@@ -14,26 +14,37 @@ class GetLessonController extends Controller
 {
     public function index(Request $request, Course $course, Module $module, Lesson $lesson)
     {
-        if (
-            !$request->user()
-                ->course_enrollment()
-                ->where('course_id', $course->id)->exists()
-        ) {
-            return response()->json([
-                'error' => 'You are not enrolled in this course.'
-            ], 403);
-        }
+        $user = $request->user();
 
         try {
-            if ($module->course_id !== $course->id) {
+            // Check if user is enrolled in this course
+            if (
+                !$request->user()
+                    ->course_enrollment()
+                    ->where('course_id', $course->id)->exists()
+            ) {
                 return response()->json([
-                    'error' => 'Module does not belong to the specified course.'
-                ], 404);
+                    'error' => 'You are not enrolled in this course.'
+                ], 403);
             }
 
-            if ($lesson->module_id !== $module->id) {
+            // If user subscription is donex
+            if ($course->price != 0.00) {
+                $course->load(['course_purchase' => function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                }]);
+
+                if ($course->course_purchase->isEmpty() && (!isset($user->owenaplus_subscription) || $user->owenaplus_subscription->status !== 'active')) {
+                    return response()->json([
+                        'error' => 'Renew your subscription to access this course'
+                    ], 403);
+                }
+            }
+
+            // So the user doen't try to fetch random modules from other lessons
+            if ($module->course_id !== $course->id || $lesson->module_id !== $module->id) {
                 return response()->json([
-                    'error' => 'Lesson does not belong to the specified module.'
+                    'error' => 'Lesson does not belong to the specified course.'
                 ], 404);
             }
 
